@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>VideoClub</title>
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="VideoClub"><meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#000;--sf:#0e0e0e;--sf2:#262626;--tx:#f2f2f2;--mu:#9b9b9b;--ac:#f5c518;--rd:#e5484d}
+*{box-sizing:border-box;margin:0}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,Segoe UI,sans-serif;padding:env(safe-area-inset-top) 0 90px;-webkit-tap-highlight-color:transparent}
+h1,h2,.t,.btn{font-family:'Bebas Neue','Oswald',Impact,'Arial Narrow',sans-serif;letter-spacing:.05em;text-transform:uppercase;font-weight:400}
+header{padding:12px 14px 6px}
+.top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+h1{font-size:34px;line-height:1;letter-spacing:.1em}
+.cnt{color:var(--mu);font-size:13px}
+.tools{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:8px}
+.r2{grid-column:1/-1;display:flex;gap:8px}
+.r2 select{flex:1;min-width:0}
+input,textarea,select{background:var(--sf);color:var(--tx);border:1px solid var(--sf2);border-radius:8px;padding:9px 11px;font:inherit;width:100%}
+select{width:auto}
+textarea{resize:vertical;min-height:90px}
+.btn{background:var(--ac);color:#111;border:0;border-radius:8px;padding:9px 16px;font-size:20px;line-height:1.2;cursor:pointer;display:inline-block;text-align:center}
+.btn.big{display:block;padding:13px}
+.btn.sec{background:var(--sf2);color:var(--tx)}
+.btn.del{background:none;color:var(--rd);border:1px solid var(--rd)}
+.lnk{background:none;border:0;color:var(--mu);font:inherit;padding:10px;text-decoration:underline;cursor:pointer}
+#list{padding:8px 12px;display:grid;gap:6px;max-width:760px;margin:auto}
+.card{display:flex;gap:10px;background:var(--sf);border:1px solid var(--sf2);border-left:3px solid var(--ac);border-radius:6px;padding:7px;cursor:pointer}
+.card:active{background:var(--sf2)}
+.pos{width:56px;height:84px;flex:none;border-radius:4px;object-fit:cover;background:var(--sf2);display:flex;align-items:center;justify-content:center;color:var(--mu);font-size:10px;text-align:center}
+.bd{min-width:0;flex:1;display:flex;flex-direction:column;gap:2px}
+.t{font-size:20px;line-height:1.05;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.st{display:flex;gap:1px;font-size:16px;line-height:1}
+.st i{font-style:normal;color:#3a3a3a}
+.st i.on{color:var(--ac)}
+.meta{display:flex;gap:2px 10px;color:var(--mu);font-size:12px;white-space:nowrap;overflow:hidden}
+.meta span:last-child{overflow:hidden;text-overflow:ellipsis}
+.cm{color:#bdbdbd;font-size:12px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.empty{text-align:center;color:var(--mu);padding:60px 20px}
+.fab{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));width:56px;height:56px;border-radius:50%;font-size:32px;line-height:1;border:0;background:var(--ac);color:#111;box-shadow:0 4px 14px #000;cursor:pointer}
+.ov{position:fixed;inset:0;background:#000b;z-index:20;display:flex;align-items:flex-end;justify-content:center}
+.pn{background:var(--bg);border:1px solid var(--sf2);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:16px 16px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));display:grid;gap:12px}
+.or{text-align:center;color:var(--mu);font-size:14px}
+.row{display:flex;gap:8px}
+.mu{color:var(--mu);font-size:14px}
+#det{position:fixed;inset:0;z-index:30;background:var(--bg);overflow:auto;padding:env(safe-area-inset-top) 0 40px}
+.dw{max-width:620px;margin:auto;padding:14px 18px;display:grid;gap:14px}
+.hd{display:flex;gap:16px}
+.hd .pos{width:42%;height:auto;aspect-ratio:2/3}
+.hd .bd{gap:8px}
+.dw .t{display:block;overflow:visible;-webkit-line-clamp:unset;font-size:34px}
+.dw .meta{flex-wrap:wrap;white-space:normal;font-size:14px}
+.dw .meta span:last-child{overflow:visible}
+.dw .st{font-size:32px;cursor:pointer}
+h2{font-size:18px;color:var(--mu);margin-bottom:4px}
+.menu{position:absolute;right:14px;top:100px;background:var(--sf);border:1px solid var(--sf2);border-radius:10px;padding:6px;display:grid;z-index:6}
+.menu button{background:none;border:0;color:var(--tx);font:inherit;padding:12px 16px;text-align:left}
+#msg{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--sf2);padding:10px 16px;border-radius:20px;font-size:14px;z-index:50}
+</style></head><body>
+<header>
+ <div class="top"><h1>VideoClub</h1><span class="cnt" id="cnt"></span></div>
+ <div class="tools">
+  <input id="q" type="search" placeholder="Buscar título o género">
+  <button class="btn sec" id="mb" aria-label="Menú">⋯</button>
+  <div class="r2">
+   <select id="sort"><option value="new">Recientes</option><option value="stars">Mejor puntuadas</option><option value="az">A–Z</option></select>
+   <select id="gen"></select>
+  </div>
+ </div>
+</header>
+<div class="menu" id="menu" hidden>
+ <button id="exp">Exportar respaldo</button>
+ <button id="imp">Importar respaldo</button>
+ <button id="key">Clave de TMDB</button>
+</div>
+<input type="file" id="fimp" accept=".json" hidden>
+<main id="list"></main>
+<button class="fab" id="add" aria-label="Agregar película">+</button>
+
+<div class="ov" id="sheet" hidden><div class="pn">
+ <div id="s1" style="display:grid;gap:12px">
+  <h2 style="font-size:30px;color:var(--tx)">Agregar película</h2>
+  <label class="btn big">Subir página guardada<input type="file" id="fpage" accept=".mht,.mhtml,.html,.htm" hidden></label>
+  <div class="or">o pegá el link de IMDb</div>
+  <div class="row"><input id="link" placeholder="Pegá el link de IMDb (o lo que comparte la app)"><button class="btn" id="go">Buscar</button></div>
+  <button class="lnk" id="manual">Cargar a mano</button>
+  <p class="mu" id="stt"></p>
+  <button class="lnk" id="x1">Cancelar</button>
+ </div>
+ <div id="s2" style="display:grid;gap:12px" hidden>
+  <div class="hd">
+   <label style="width:42%;cursor:pointer"><img class="pos" id="dimg" style="width:100%;height:auto;aspect-ratio:2/3"><input type="file" id="fimg" accept="image/*" hidden></label>
+   <div class="bd" style="flex:1;gap:10px">
+    <input id="dtit" placeholder="Título">
+    <div class="st" id="dst" style="font-size:34px"></div>
+   </div>
+  </div>
+  <textarea id="dcom" placeholder="Tu comentario"></textarea>
+  <textarea id="dplot" placeholder="Sinopsis" style="min-height:70px"></textarea>
+  <div class="row"><input id="ddur" placeholder="Duración (1h 47m)"><input id="dgen" placeholder="Géneros, separados por coma"></div>
+  <div class="row"><button class="btn sec" id="x2" style="flex:1">Cancelar</button><button class="btn" id="sv" style="flex:2">Guardar</button></div>
+ </div>
+</div></div>
+
+<div id="det" hidden></div>
+<div id="msg" hidden></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let movies=[],draft=null;
+
+/* ---- guardado en el celu (IndexedDB) ---- */
+const idb=()=>new Promise((ok,no)=>{const q=indexedDB.open('pelis',1);q.onupgradeneeded=()=>q.result.createObjectStore('s');q.onsuccess=()=>ok(q.result);q.onerror=no});
+async function load(){const d=await idb();return new Promise(r=>{const g=d.transaction('s').objectStore('s').get('m');g.onsuccess=()=>r(g.result||[]);g.onerror=()=>r([])})}
+async function save(){const d=await idb();d.transaction('s','readwrite').objectStore('s').put(movies,'m')}
+function toast(t){const m=$('#msg');m.textContent=t;m.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>m.hidden=true,2800)}
+
+/* ---- lista ---- */
+const stars=n=>[1,2,3,4,5].map(i=>`<i class="${i<=n?'on':''}" data-n="${i}">★</i>`).join('');
+function render(){
+ const q=$('#q').value.toLowerCase(),s=$('#sort').value,gl=m=>(m.genres||'').split(',').map(x=>x.trim()).filter(Boolean);
+ const gs=[...new Set(movies.flatMap(gl))].sort((a,b)=>a.localeCompare(b)),gsel=$('#gen'),cur=gsel.value;
+ gsel.innerHTML='<option value="">Todos los géneros</option>'+gs.map(x=>`<option${x==cur?' selected':''}>${esc(x)}</option>`).join('');
+ const g=gsel.value;
+ const a=movies.filter(m=>(m.title+' '+m.comment+' '+(m.genres||'')).toLowerCase().includes(q)&&(!g||gl(m).includes(g)));
+ a.sort(s=='stars'?(x,y)=>y.stars-x.stars||y.added-x.added:s=='az'?(x,y)=>x.title.localeCompare(y.title):(x,y)=>y.added-x.added);
+ $('#cnt').textContent=movies.length?movies.length+(movies.length==1?' película':' películas'):'';
+ $('#list').innerHTML=a.map(m=>`<article class="card" data-id="${m.id}">${m.img?`<img class="pos" src="${m.img}" alt="">`:'<div class="pos">Sin portada</div>'}<div class="bd"><div class="t">${esc(m.title)}</div><div class="st">${stars(m.stars)}</div><div class="meta">${m.dur?`<span>${esc(m.dur)}</span>`:''}${m.year?`<span>${esc(m.year)}</span>`:''}</div><div class="cm">${esc(m.plot)}</div></div></article>`).join('')||`<div class="empty">${movies.length?'No hay resultados.':'Todavía no cargaste ninguna película.<br>Tocá + para agregar la primera.'}</div>`;
+}
+$('#list').onclick=e=>{const c=e.target.closest('.card');if(c)openDet(c.dataset.id)};
+$('#q').oninput=$('#sort').onchange=$('#gen').onchange=render;
+
+/* ---- detalle ---- */
+function openDet(id){
+ const m=movies.find(x=>x.id==id),d=$('#det');
+ d.innerHTML=`<div class="dw"><div><button class="lnk" id="back" style="padding-left:0">← Volver</button></div>
+ <div class="hd">${m.img?`<img class="pos" src="${m.img}" alt="">`:'<div class="pos">Sin portada</div>'}<div class="bd"><div class="t">${esc(m.title)}</div><div class="meta">${m.year?`<span>${esc(m.year)}</span>`:''}${m.dur?`<span>${esc(m.dur)}</span>`:''}${m.genres?`<span>${esc(m.genres)}</span>`:''}</div><div class="st" id="dd">${stars(m.stars)}</div></div></div>
+ <div><h2>Mi comentario</h2><textarea id="ec" placeholder="Escribí tu comentario">${esc(m.comment)}</textarea></div>
+ ${m.plot?`<div><h2>Sinopsis</h2><p>${esc(m.plot)}</p></div>`:''}
+ ${m.cast&&m.cast.length?`<div><h2>Reparto</h2><p>${m.cast.map(esc).join(', ')}</p></div>`:''}
+ <button class="btn del" id="rm" style="margin-top:10px">Eliminar película</button></div>`;
+ d.hidden=false;d.scrollTop=0;
+ const close=()=>{d.hidden=true;render()};
+ $('#back').onclick=close;
+ $('#dd').onclick=e=>{const n=+e.target.dataset.n;if(!n)return;m.stars=m.stars==n?0:n;$('#dd').innerHTML=stars(m.stars);save()};
+ let t;$('#ec').oninput=e=>{m.comment=e.target.value;clearTimeout(t);t=setTimeout(save,400)};
+ $('#rm').onclick=()=>{if(confirm('¿Eliminar "'+m.title+'"?')){movies=movies.filter(x=>x!==m);save();close()}};
+}
+
+/* ---- agregar ---- */
+const b2s=u=>{let s='';for(let i=0;i<u.length;i+=32768)s+=String.fromCharCode.apply(null,u.subarray(i,i+32768));return s};
+const s2b=s=>{const u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);return u};
+async function shrink(blob){
+ const u=URL.createObjectURL(blob),im=new Image();
+ await new Promise((ok,no)=>{im.onload=ok;im.onerror=no;im.src=u});
+ const w=Math.min(420,im.naturalWidth),h=Math.round(im.naturalHeight*w/im.naturalWidth),c=document.createElement('canvas');
+ c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);URL.revokeObjectURL(u);
+ return c.toDataURL('image/jpeg',.85);
+}
+async function fromPage(file){
+ const s=b2s(new Uint8Array(await file.arrayBuffer()));
+ let html='',imgs=[];
+ if(/^From:|^MIME-Version:/i.test(s.slice(0,200))){
+  const bm=/boundary="?([^"\r\n;]+)"?/i.exec(s.slice(0,3000));
+  if(!bm)throw Error('No pude leer el archivo.');
+  for(const p of s.split('--'+bm[1]).slice(1)){
+   const i=p.indexOf('\r\n\r\n');if(i<0)continue;
+   const h=p.slice(0,i),ty=(/Content-Type:\s*([^\s;]+)/i.exec(h)||[])[1]||'',loc=(/Content-Location:\s*(\S+)/i.exec(h)||[])[1]||'',en=((/Content-Transfer-Encoding:\s*(\S+)/i.exec(h)||[])[1]||'').toLowerCase();
+   let b=p.slice(i+4).replace(/\r\n$/,'');
+   if(en=='base64')b=atob(b.replace(/\s/g,''));
+   else if(en=='quoted-printable')b=b.replace(/=\r?\n/g,'').replace(/=([0-9A-F]{2})/g,(_,x)=>String.fromCharCode(parseInt(x,16)));
+   if(ty=='text/html'&&!html)html=new TextDecoder().decode(s2b(b));
+   else if(ty.startsWith('image/'))imgs.push({loc,ty,b});
+  }
+ }else html=new TextDecoder().decode(s2b(s));
+ return parseDoc(html,imgs);
+}
+/* lee el HTML de una página de IMDb (de un archivo guardado o bajada por internet) */
+const prox=u=>[u,'https://corsproxy.io/?url='+encodeURIComponent(u),'https://api.allorigins.win/raw?url='+encodeURIComponent(u)];
+async function getVia(u,type){
+ for(const p of prox(u)){
+  try{const r=await fetch(p,{signal:AbortSignal.timeout(9000)});if(r.ok)return type=='blob'?await r.blob():await r.text()}catch(e){}
+ }
+ return null;
+}
+async function parseDoc(html,imgs){
+ imgs=imgs||[];
+ const doc=new DOMParser().parseFromString(html,'text/html');
+ let ld={};
+ for(const sc of doc.querySelectorAll('script[type="application/ld+json"]')){try{const j=JSON.parse(sc.textContent);if(j&&j.name){ld=j;break}}catch(e){}}
+ const og=p=>(doc.querySelector(`meta[property="${p}"]`)||{}).content||'';
+ const ot=og('og:title'),m=/^(.*?)\s*\((\d{4})\)/.exec(ot);
+ const title=((m?m[1]:ot.split('|')[0].trim())||ld.name||(doc.title||'').replace(/\s*-\s*IMDb$/,'')).trim();
+ if(!title)throw Error('Esa página no parece ser de una película.');
+ const pl=doc.querySelector('[data-testid=plot-xl]')||doc.querySelector('[data-testid=plot-l]');
+ const pi=doc.querySelector('[data-testid=hero-media__poster] img');
+ const src=(pi&&pi.getAttribute('src'))||og('og:image')||(typeof ld.image=='string'?ld.image:'')||'',id=(/(MV5B[^._]+)/.exec(src)||[])[1];
+ const c=imgs.filter(x=>x.loc==src||(id&&x.loc.includes(id))).sort((a,b)=>b.b.length-a.b.length)[0];
+ let blob=c?new Blob([s2b(c.b)],{type:c.ty}):null;
+ if(!blob&&/^http/.test(src))blob=await getVia(src,'blob');
+ let dur=(/^(\d+h\s*)?(\d+m)?/.exec(og('og:description'))||[''])[0].trim();
+ if(!dur&&ld.duration){const d=/PT(?:(\d+)H)?(?:(\d+)M)?/.exec(ld.duration);if(d)dur=((d[1]?d[1]+'h ':'')+(d[2]?d[2]+'m':'')).trim()}
+ let cast=[...new Set([...doc.querySelectorAll('[data-testid=title-cast-item__actor]')].map(a=>a.textContent.trim()))];
+ if(!cast.length&&ld.actor)cast=[].concat(ld.actor).map(a=>a.name).filter(Boolean);
+ return{title,year:m?m[2]:(ld.datePublished||'').slice(0,4),dur,
+  genres:(ot.split('|')[1]||'').trim()||[].concat(ld.genre||[]).join(', '),
+  plot:pl?pl.textContent.trim():(ld.description||(doc.querySelector('meta[name=description]')||{}).content||''),
+  cast:cast.slice(0,8),blob};
+}
+async function fromLink(u){
+ /* acepta el texto completo que comparte la app de IMDb ("Título https://m.imdb.com/title/tt…") */
+ const tt=(/tt\d{6,}/.exec(u)||[])[0];
+ if(!tt)throw Error('No encontré un link de IMDb (tiene un código tipo tt1234567).');
+ const key=localStorage.tmdb;
+ /* 1) TMDB (la más completa, en español) si hay clave */
+ if(key){try{
+  const f=await (await fetch(`https://api.themoviedb.org/3/find/${tt}?api_key=${key}&external_source=imdb_id&language=es-ES`)).json();
+  const r=(f.movie_results||[])[0];
+  if(r){
+   const d=await (await fetch(`https://api.themoviedb.org/3/movie/${r.id}?api_key=${key}&language=es-ES&append_to_response=credits`)).json();
+   let blob=null;if(d.poster_path){try{blob=await (await fetch('https://image.tmdb.org/t/p/w500'+d.poster_path)).blob()}catch(e){}}
+   return{title:d.title,year:(d.release_date||'').slice(0,4),dur:d.runtime?Math.floor(d.runtime/60)+'h '+d.runtime%60+'m':'',
+    genres:(d.genres||[]).map(g=>g.name).join(', '),plot:d.overview||'',cast:d.credits.cast.slice(0,8).map(x=>x.name),blob};
+  }
+ }catch(e){}}
+ /* 2) la página de IMDb, bajada a través de un proxy */
+ const html=await getVia('https://www.imdb.com/title/'+tt+'/');
+ if(html&&html.length>5000){try{const r=await parseDoc(html);if(r.title)return r}catch(e){}}
+ /* 3) último recurso: el buscador de IMDb (título, año, portada y actores; sin sinopsis ni géneros) */
+ const sj=await getVia('https://v2.sg.media-imdb.com/suggestion/t/'+tt+'.json');
+ if(sj){try{
+  const x=(JSON.parse(sj).d||[]).find(v=>v.id==tt);
+  if(x){
+   const blob=x.i&&x.i.imageUrl?await getVia(x.i.imageUrl,'blob'):null;
+   toast('Faltan sinopsis y géneros: completalos a mano');
+   return{title:x.l,year:x.y?String(x.y):'',dur:'',genres:'',plot:'',cast:(x.s||'').split(',').map(a=>a.trim()).filter(Boolean),blob};
+  }
+ }catch(e){}}
+ throw Error('No pude leer ese link desde acá. Probá con "Subir página guardada" o cargá la clave de TMDB en el menú ⋯.');
+}
+async function begin(fn){
+ $('#stt').textContent='Leyendo…';
+ try{
+  const r=await fn();const img=r.blob?await shrink(r.blob).catch(()=>''):'';delete r.blob;
+  draft={...r,img,stars:0,comment:''};showDraft();
+ }catch(e){$('#stt').textContent=e.message||'No se pudo.'}
+}
+function showDraft(){
+ $('#s1').hidden=true;$('#s2').hidden=false;
+ $('#dimg').src=draft.img||'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="300"><rect width="200" height="300" fill="#3b2a32"/><text x="100" y="155" fill="#b9a79b" font-family="sans-serif" font-size="14" text-anchor="middle">Tocá para elegir</text></svg>');
+ $('#dtit').value=draft.title||'';$('#dplot').value=draft.plot||'';$('#ddur').value=draft.dur||'';$('#dgen').value=draft.genres||'';$('#dcom').value='';$('#dst').innerHTML=stars(0);
+}
+function openSheet(){$('#sheet').hidden=false;$('#s1').hidden=false;$('#s2').hidden=true;$('#stt').textContent='';$('#link').value='';draft=null}
+const closeSheet=()=>$('#sheet').hidden=true;
+$('#add').onclick=openSheet;$('#x1').onclick=$('#x2').onclick=closeSheet;
+$('#fpage').onchange=e=>{const f=e.target.files[0];e.target.value='';if(f)begin(()=>fromPage(f))};
+$('#go').onclick=()=>{const u=$('#link').value.trim();if(u)begin(()=>fromLink(u))};
+$('#manual').onclick=()=>{draft={title:'',year:'',dur:'',genres:'',plot:'',cast:[],img:'',stars:0,comment:''};showDraft()};
+$('#fimg').onchange=async e=>{const f=e.target.files[0];if(!f)return;draft.img=await shrink(f);$('#dimg').src=draft.img};
+$('#dst').onclick=e=>{const n=+e.target.dataset.n;if(!n)return;draft.stars=draft.stars==n?0:n;$('#dst').innerHTML=stars(draft.stars)};
+$('#sv').onclick=async()=>{
+ const t=$('#dtit').value.trim();if(!t)return toast('Poné un título');
+ Object.assign(draft,{title:t,plot:$('#dplot').value.trim(),dur:$('#ddur').value.trim(),genres:$('#dgen').value.trim(),comment:$('#dcom').value.trim(),id:Date.now().toString(36),added:Date.now()});
+ movies.unshift(draft);await save();closeSheet();render();toast('Guardada');
+};
+
+/* ---- menú y respaldo ---- */
+$('#mb').onclick=e=>{e.stopPropagation();$('#menu').hidden=!$('#menu').hidden};
+document.onclick=()=>$('#menu').hidden=true;
+$('#exp').onclick=()=>{
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(movies)],{type:'application/json'}));
+ a.download='mis-peliculas-'+new Date().toISOString().slice(0,10)+'.json';a.click();
+};
+$('#imp').onclick=()=>$('#fimp').click();
+$('#fimp').onchange=async e=>{
+ const f=e.target.files[0];e.target.value='';if(!f)return;
+ try{const a=JSON.parse(await f.text());if(!Array.isArray(a))throw 0;
+  const ids=new Set(movies.map(m=>m.id));let n=0;
+  a.forEach(m=>{if(m&&m.title&&!ids.has(m.id)){movies.push(m);n++}});
+  await save();render();toast(n+' películas importadas');
+ }catch(x){toast('Ese archivo no es un respaldo válido')}
+};
+$('#key').onclick=()=>{
+ const k=prompt('Clave (API key v3) de TMDB. Es gratis en themoviedb.org → Ajustes → API.',localStorage.tmdb||'');
+ if(k!==null){localStorage.tmdb=k.trim();toast('Clave guardada')}
+};
+
+load().then(a=>{
+ movies=a;render();
+ /* si llegó compartido desde la app de IMDb (PWA instalada), abre solo la carga */
+ const p=new URLSearchParams(location.search),sh=[p.get('url'),p.get('text'),p.get('title')].filter(Boolean).join(' ');
+ if(/tt\d{6,}/.test(sh)){openSheet();$('#link').value=sh;history.replaceState(null,'',location.pathname);$('#go').click()}
+});
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
+</script></body></html>

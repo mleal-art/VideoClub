@@ -1,0 +1,41 @@
+VIDEOCLUB - paquete PWA
+=======================
+
+ARCHIVOS (todos al mismo nivel, sin carpetas)
+  index.html            la app
+  manifest.json         datos de la app (nombre, íconos, compartir desde IMDb)
+  sw.js                 service worker (funciona sin internet)
+  icon-192.png          ícono
+  icon-512.png          ícono
+  icon-maskable-512.png ícono con margen (Android lo recorta en círculo/cuadrado)
+  .nojekyll             evita que GitHub Pages procese los archivos
+
+1) SUBIR A GITHUB PAGES
+  - Repositorio nuevo, PÚBLICO.
+  - Add file > Upload files > subí todo (incluido .nojekyll; si no te deja
+    subirlo por ser "oculto", no pasa nada, no es obligatorio).
+  - Settings > Pages > Deploy from a branch > main / (root) > Save.
+  - Queda en https://TUUSUARIO.github.io/NOMBRE-REPO/
+
+2) GENERAR EL APK CON PWABUILDER
+  - Entrá a https://www.pwabuilder.com y pegá la dirección de GitHub Pages.
+  - Debe marcar manifest + service worker en verde.
+  - "Package for stores" > Android > Generate.
+  - Package ID (código de paquete): algo único tipo  com.tunombre.videoclub
+    (en minúsculas, con puntos, sin espacios; no se puede cambiar después
+    de publicar en Play Store).
+  - Para instalar directo en el celu: bajá el zip, usá el archivo .apk
+    ("sideload") y habilitá "instalar apps de orígenes desconocidos".
+  - El .aab es solo para Google Play.
+  - Guardá bien el archivo de firma (signing key) que te da PWABuilder.
+
+3) QUE NO SE PIERDAN LAS PELÍCULAS
+  - Se guardan en el celu (IndexedDB), no en GitHub. La app instalada (APK)
+    y la página abierta en Chrome NO comparten datos.
+  - Usá siempre una sola. Menú ... > Exportar respaldo para pasar o guardar.
+
+4) COMPARTIR DESDE LA APP DE IMDb
+  - Con la app instalada, en IMDb tocá Compartir y elegí VideoClub:
+    abre la carga sola con la película.
+  - (Depende de PWABuilder/Android; si no aparece, copiá el link y pegalo
+    con el botón +.)
